@@ -3,24 +3,20 @@ const stockRouter = express.Router()
 const db = require('../db')
 const fs = require('fs/promises')
 
-stockRouter.get('/', (req, res) => {
-    res.send('This is the stock route')
+stockRouter.get('/', async (req, res) => {
+    let items = await db.getStockCollection().find().toArray()
+    res.send(items)
 })
 
-stockRouter.get('/:name', (req, res) => {
-    for (i in db) {
-        if (db[i].name === req.params.name) {
-            res.send(db[i])
-            return;
-        }
-    }
+stockRouter.get('/:name', async (req, res) => {
+    const stockCollection = db.getStockCollection()
+    let item = await stockCollection.findOne({ name: req.params.name })
+    res.send(item)
 })
 
-stockRouter.post('/addItem', (req, res) => {
-    db.push(req.body)
-    fs.writeFile('./db.json', JSON.stringify(db))
-    res.send('Item added')
+stockRouter.post('/addItem', async (req, res) => {
+    await db.getStockCollection().insert(req.body)
+    res.send("success!")
 })
-
 
 module.exports = stockRouter

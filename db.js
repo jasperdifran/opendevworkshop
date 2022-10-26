@@ -1,6 +1,6 @@
 const { MongoClient } = require('mongodb')
 
-const url = ''
+const url = 'mongodb+srv://jasper:jasper123@cluster0.qa2batp.mongodb.net/?retryWrites=true&w=majority'
 const client = new MongoClient(url)
 
 let dbConnection;
